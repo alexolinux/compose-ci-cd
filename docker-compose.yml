@@ -1,0 +1,39 @@
+services:
+  code-server:
+    #https://coder.com/docs/code-server/install#docker
+    image: codercom/code-server:latest
+    container_name: code-server
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    volumes:
+      - ${HOME}/.local:/home/coder/.local
+      - ${HOME}/.config:/home/coder/.config
+      - ${WORKSPACE}:/home/coder/project
+    environment:
+      - TZ=UTC
+      - UID=1000
+      - GID=1000
+      - DOCKER_USER=${USER}
+  jenkins:
+    image: jenkins-ci
+    build:
+      context: jenkins
+      dockerfile: Dockerfile
+      args:
+        # Check the SO Architecture
+        - ARCH=arm64
+    ports:
+      - "8008:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
+volumes:
+  jenkins_home:
+    # Use external when the volume has been created out of the compose.
+    external: true
+
+networks:
+  default:
+    name: ci-cd
