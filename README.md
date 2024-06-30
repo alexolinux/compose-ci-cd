@@ -1,2 +1,2 @@
 # compose-ci-cd
-Orchestrated CI/CD for Personal Lab
+Orchestrated CI/CD for Personal Lab (docker-compose)
