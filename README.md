@@ -1,6 +1,12 @@
 # compose-ci-cd
+---------------
+
 Orchestrated CI/CD for Personal Lab (docker-compose)
 
+Structure
+
+
+```shell
 .
 ├── code-server
 ├── docker-compose.yml
@@ -9,6 +15,7 @@ Orchestrated CI/CD for Personal Lab (docker-compose)
 ├── LICENSE
 ├── .env
 └── README.md
+```
 
 `.env` Example
 
