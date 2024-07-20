@@ -1,4 +1,5 @@
 # compose-ci-cd
+
 ---------------
 
 Orchestrated CI/CD for Personal Lab (docker-compose)
@@ -17,9 +18,23 @@ Structure
 └── README.md
 ```
 
-`.env` Example
+## Requirements
 
-```shell
-WORKSPACE="${HOME}/workspace"
-```
+* `.env` file:
+  
+  `.env` example content:
+  
+  ```shell
+  WORKSPACE="${HOME}/workspace"
+  ```
 
+* Jenkins Docker Volume:
+
+  ```shell
+  docker volume create jenkins_home`
+  ```
+
+Author Information
+Alex Mendes
+
+<https://www.linkedin.com/in/mendesalex/>
