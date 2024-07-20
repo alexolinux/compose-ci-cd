@@ -6,7 +6,6 @@ Orchestrated CI/CD for Personal Lab (docker-compose)
 
 Structure
 
-
 ```shell
 .
 ├── code-server
