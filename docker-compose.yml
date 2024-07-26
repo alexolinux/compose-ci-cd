@@ -17,6 +17,8 @@ services:
       - DOCKER_USER=${USER}
   jenkins:
     image: jenkins-ci
+    container_name: jenkins
+    restart: unless-stopped
     build:
       context: jenkins
       dockerfile: Dockerfile
