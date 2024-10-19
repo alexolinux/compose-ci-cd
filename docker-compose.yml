@@ -5,16 +5,17 @@ services:
     container_name: code-server
     restart: unless-stopped
     ports:
-      - "8081:8080"
+      - "${CODE_PORT}:8080"
     volumes:
       - ${HOME}/.local:/home/coder/.local
       - ${HOME}/.config:/home/coder/.config
       - ${WORKSPACE}:/home/coder/project
     environment:
-      - TZ=UTC
-      - UID=1000
-      - GID=1000
+      - TZ=${TZ}
+      - UID=${UID}
+      - GID=${GID}
       - DOCKER_USER=${USER}
+    user: "${UID}:${GID}"
   jenkins:
     image: jenkins-ci
     container_name: jenkins
@@ -24,10 +25,10 @@ services:
       dockerfile: Dockerfile
       args:
         # Check the SO Architecture
-        - ARCH=arm64
+        ARCH: ${ARCH}
     ports:
-      - "8008:8080"
-      - "50000:50000"
+      - "${JENKINS_PORT}:8080"
+      - "${JENKINS_AGENT_PORT}:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
 
@@ -39,3 +40,4 @@ volumes:
 networks:
   default:
     name: ci-cd
+

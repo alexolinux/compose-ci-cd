@@ -2,7 +2,7 @@ FROM jenkins/jenkins:latest
 
 # Terraform Version Release - https://releases.hashicorp.com/terraform/
 ENV TF_VER=1.9.0
-ARG ARCH=arm64
+ARG ARCH
 
 # Switch to root user
 USER root
