@@ -25,6 +25,12 @@ Structure
   
   ```shell
   WORKSPACE="${HOME}/workspace"
+  ARCH="amd64"
+  TZ="UTC"
+  UID=1001
+  GID=1001
+  JENKINS_PORT=8080
+  CODE_PORT=8081
   ```
 
 * Jenkins Docker Volume:
