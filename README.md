@@ -46,7 +46,7 @@ Structure
   docker volume create jenkins_home`
   ```
 
-Author Information
+**Author:**
 Alex Mendes
 
 <https://www.linkedin.com/in/mendesalex/>
