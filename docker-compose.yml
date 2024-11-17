@@ -1,7 +1,8 @@
 services:
+  #https://coder.com/docs/code-server/install#docker
   code-server:
-    #https://coder.com/docs/code-server/install#docker
-    image: codercom/code-server:latest
+    #https://hub.docker.com/r/codercom/code-server/tags
+    image: "codercom/code-server:${CODE_VERSION}"
     container_name: code-server
     restart: unless-stopped
     ports:
@@ -40,4 +41,3 @@ volumes:
 networks:
   default:
     name: ci-cd
-
