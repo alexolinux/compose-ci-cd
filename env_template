@@ -5,5 +5,5 @@ HOST_UID=
 HOST_GID=
 JENKINS_PORT=
 JENKINS_AGENT_PORT=
-CODE_VERSION=
+CODE_VERSION=""     #https://github.com/coder/code-server/releases
 CODE_PORT=
