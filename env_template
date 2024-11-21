@@ -1,9 +1,9 @@
 WORKSPACE="${HOME}/workspace"
-ARCH="" #> "amd64" for x86_64 "arm64" for ARM (i.e.: Raspberry PI)
+ARCH=""             #> "amd64" for x86_64 "arm64" for ARM (i.e.: Raspberry PI)
 TZ=
 HOST_UID=
 HOST_GID=
 JENKINS_PORT=
 JENKINS_AGENT_PORT=
-CODE_VERSION=""     #https://github.com/coder/code-server/releases
+CODE_VERSION=""     #https://hub.docker.com/r/codercom/code-server/tags
 CODE_PORT=
