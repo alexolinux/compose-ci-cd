@@ -9,11 +9,12 @@ Structure
 ```shell
 .
 ├── code-server
+│   └── Dockerfile
 ├── docker-compose.yml
+├── env_template
 ├── jenkins
 │   └── Dockerfile
 ├── LICENSE
-├── .env
 └── README.md
 ```
 
