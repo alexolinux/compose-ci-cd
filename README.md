@@ -5,13 +5,16 @@
 Orchestrated CI/CD for Personal Lab (docker-compose)
 
 * CI Jenkins with:
-  - kubectl
-  - helm
-  - terraform
   - AWS Cli
+  - helm
+  - kubectl
+  - terraform
 
 * Code-Server with:
   - AWS Cli
+  - helm
+  - kubectl
+  - terraform
 
 Structure
 
