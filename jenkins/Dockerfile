@@ -1,7 +1,7 @@
 FROM jenkins/jenkins:latest
 
 # Terraform Version Release - https://releases.hashicorp.com/terraform/
-ENV TF_VER=1.9.0
+ENV TF_VER=1.10.3
 ARG ARCH
 
 # Switch to root user
@@ -19,10 +19,6 @@ RUN apt-get update && \
                        jq
 
 # Install Docker CE CLI (Check the SO Architecture)
-##RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
-##    add-apt-repository "deb [arch=${ARCH}] https://download.docker.com/linux/debian $(lsb_release -cs) stable" && \
-##    apt-get update && \
-##    apt-get install -y docker-ce-cli
 RUN curl -fsSL https://get.docker.com | sh
 
 # Install kubectl

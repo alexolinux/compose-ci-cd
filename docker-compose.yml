@@ -1,8 +1,7 @@
 services:
-  #https://coder.com/docs/code-server/install#docker
   code-server:
+    #https://coder.com/docs/code-server/install#docker
     #https://hub.docker.com/r/codercom/code-server/tags
-    #image: "codercom/code-server:${CODE_VERSION}"
     image: code-server-ci
     container_name: code-server
     restart: unless-stopped
@@ -10,6 +9,7 @@ services:
       context: code-server
       dockerfile: Dockerfile
       args:
+        ARCH: "${ARCH}"
         CODE_VERSION: "${CODE_VERSION}"
         HOST_UID: "${HOST_UID}"
         HOST_GID: "${HOST_GID}"
@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile
       args:
         # Check the SO Architecture
-        ARCH: ${ARCH}
+        ARCH: "${ARCH}"
     ports:
       - "${JENKINS_PORT}:8080"
       - "${JENKINS_AGENT_PORT}:50000"
