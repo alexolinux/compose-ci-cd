@@ -1,10 +1,13 @@
 services:
+  #https://coder.com/docs/code-server/install#docker
   code-server:
-    #https://coder.com/docs/code-server/install#docker
     #https://hub.docker.com/r/codercom/code-server/tags
     image: code-server-ci
     container_name: code-server
+    hostname: code-server
     restart: unless-stopped
+    networks:
+      - xlocal
     build:
       context: code-server
       dockerfile: Dockerfile
@@ -16,8 +19,8 @@ services:
     ports:
       - "${CODE_PORT}:8080"
     volumes:
+      - $CONFIG/code-server:/home/coder/.config
       - ${HOME}/.local:/home/coder/.local
-      - ${HOME}/.config:/home/coder/.config
       - ${WORKSPACE}:/home/coder/project
     environment:
       - TZ=${TZ}
@@ -25,10 +28,14 @@ services:
       - GID=${HOST_GID}
       - DOCKER_USER=${USER}
     user: "${HOST_UID}:${HOST_GID}"
+  #https://www.jenkins.io/doc/book/installing/docker/
   jenkins:
     image: jenkins-ci
     container_name: jenkins
+    hostname: jenkins
     restart: unless-stopped
+    networks:
+      - xlocal
     build:
       context: jenkins
       dockerfile: Dockerfile
@@ -47,5 +54,6 @@ volumes:
     external: true
 
 networks:
-  default:
-    name: ci-cd
+  xlocal:
+    name: xlocal
+    driver: bridge

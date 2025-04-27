@@ -1,4 +1,5 @@
-ARG CODE_VERSION=4.96.2-39
+ARG CODE_VERSION=4.99.3-39
+#https://hub.docker.com/r/codercom/code-server/tags
 FROM codercom/code-server:${CODE_VERSION}
 
 ARG ARCH

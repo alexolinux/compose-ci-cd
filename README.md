@@ -32,13 +32,15 @@ Structure
 
 ## Requirements
 
-* `.env` file:
+* `.env` file: Define the values according to your system configuration.
   
   `.env` example content (see `env_template`):
   
   ```shell
-  WORKSPACE="${HOME}/workspace"
   ARCH="amd64"
+  CONFIG="${HOME}/.config/microservices"
+  WORKSPACE="${HOME}/workspace"
+  LOGS="${HOME}/.local/logs"
   TZ="UTC"
   HOST_UID=1001
   HOST_GID=1001
@@ -46,6 +48,9 @@ Structure
   JENKINS_AGENT_PORT=50000
   CODE_VERSION="4.95.2-39"
   CODE_PORT=8081
+  GITLAB_HTTP=8009
+  GITLAB_HTTPS=9043
+  GITLAB_SSH=2299
   ```
 
   Load `.env`
@@ -53,6 +58,19 @@ Structure
   ```shell
   source .env
   ```
+
+:information_source: Changing the Dockerfiles is required:
+
+* code-server
+  * `CODE_VERSION`
+  * `HOST_UID
+  * `HOST_GID`
+  * `TF_VER`
+
+* jenkins
+  * `TF_VER`
+
+### Docker Volumes
 
 * Jenkins Docker Volume:
 
