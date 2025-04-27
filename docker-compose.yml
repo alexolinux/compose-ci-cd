@@ -6,6 +6,8 @@ services:
     container_name: code-server
     hostname: code-server
     restart: unless-stopped
+    networks:
+      - xlocal
     build:
       context: code-server
       dockerfile: Dockerfile
@@ -32,6 +34,8 @@ services:
     container_name: jenkins
     hostname: jenkins
     restart: unless-stopped
+    networks:
+      - xlocal
     build:
       context: jenkins
       dockerfile: Dockerfile
@@ -43,29 +47,6 @@ services:
       - "${JENKINS_AGENT_PORT}:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
-  #https://docs.gitlab.com/install/docker/installation/
-  gitlab:
-    image: gitlab-ci
-    container_name: gitlab
-    hostname: gitlab
-    restart: unless-stopped
-    build:
-      context: gitlab
-      dockerfile: Dockerfile
-    environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        #-- Add any other gitlab.rb configuration here, each on its own line
-        #external_url 'http://gitlab.local'
-        #gitlab_rails['gitlab_shell_ssh_port'] = 2222 #S{GITLAB_SSH}
-    ports:
-      - "${GITLAB_HTTP}:80"
-      #- "${GITLAB_HTTPS}:443"
-      #- "${GITLAB_SSH}:22"
-    volumes:
-      - $CONFIG/gitlab:/etc/gitlab
-      - $LOGS/gitlab:/var/log/gitlab
-      - $WORKSPACE:/var/opt/gitlab
-    shm_size: '256m'
 
 volumes:
   jenkins_home:
@@ -73,6 +54,6 @@ volumes:
     external: true
 
 networks:
-  default:
-    name: ci-cd
-
+  xlocal:
+    name: xlocal
+    driver: bridge
