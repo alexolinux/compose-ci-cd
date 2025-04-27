@@ -46,11 +46,8 @@ Structure
   HOST_GID=1001
   JENKINS_PORT=8080
   JENKINS_AGENT_PORT=50000
-  CODE_VERSION="4.95.2-39"
+  CODE_VERSION="4.99.3-39"
   CODE_PORT=8081
-  GITLAB_HTTP=8009
-  GITLAB_HTTPS=9043
-  GITLAB_SSH=2299
   ```
 
   Load `.env`
@@ -63,7 +60,7 @@ Structure
 
 * code-server
   * `CODE_VERSION`
-  * `HOST_UID
+  * `HOST_UID`
   * `HOST_GID`
   * `TF_VER`
 
@@ -82,4 +79,3 @@ Structure
 Alex Mendes
 
 <https://www.linkedin.com/in/mendesalex/>
-
