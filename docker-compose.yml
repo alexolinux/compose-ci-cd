@@ -1,9 +1,10 @@
 services:
+  #https://coder.com/docs/code-server/install#docker
   code-server:
-    #https://coder.com/docs/code-server/install#docker
     #https://hub.docker.com/r/codercom/code-server/tags
     image: code-server-ci
     container_name: code-server
+    hostname: code-server
     restart: unless-stopped
     build:
       context: code-server
@@ -16,8 +17,8 @@ services:
     ports:
       - "${CODE_PORT}:8080"
     volumes:
+      - $CONFIG/code-server:/home/coder/.config
       - ${HOME}/.local:/home/coder/.local
-      - ${HOME}/.config:/home/coder/.config
       - ${WORKSPACE}:/home/coder/project
     environment:
       - TZ=${TZ}
@@ -25,9 +26,11 @@ services:
       - GID=${HOST_GID}
       - DOCKER_USER=${USER}
     user: "${HOST_UID}:${HOST_GID}"
+  #https://www.jenkins.io/doc/book/installing/docker/
   jenkins:
     image: jenkins-ci
     container_name: jenkins
+    hostname: jenkins
     restart: unless-stopped
     build:
       context: jenkins
@@ -40,6 +43,29 @@ services:
       - "${JENKINS_AGENT_PORT}:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
+  #https://docs.gitlab.com/install/docker/installation/
+  gitlab:
+    image: gitlab-ci
+    container_name: gitlab
+    hostname: gitlab
+    restart: unless-stopped
+    build:
+      context: gitlab
+      dockerfile: Dockerfile
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        #-- Add any other gitlab.rb configuration here, each on its own line
+        #external_url 'http://gitlab.local'
+        #gitlab_rails['gitlab_shell_ssh_port'] = 2222 #S{GITLAB_SSH}
+    ports:
+      - "${GITLAB_HTTP}:80"
+      #- "${GITLAB_HTTPS}:443"
+      #- "${GITLAB_SSH}:22"
+    volumes:
+      - $CONFIG/gitlab:/etc/gitlab
+      - $LOGS/gitlab:/var/log/gitlab
+      - $WORKSPACE:/var/opt/gitlab
+    shm_size: '256m'
 
 volumes:
   jenkins_home:
@@ -49,3 +75,4 @@ volumes:
 networks:
   default:
     name: ci-cd
+
