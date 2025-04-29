@@ -34,21 +34,7 @@ Structure
 
 * `.env` file: Define the values according to your system configuration.
   
-  `.env` example content (see `env_template`):
-  
-  ```shell
-  ARCH="amd64"
-  CONFIG="${HOME}/.config/microservices"
-  WORKSPACE="${HOME}/workspace"
-  LOGS="${HOME}/.local/logs"
-  TZ="UTC"
-  HOST_UID=1001
-  HOST_GID=1001
-  JENKINS_PORT=8080
-  JENKINS_AGENT_PORT=50000
-  CODE_VERSION="4.99.3-39"
-  CODE_PORT=8081
-  ```
+  Create `.env` based on the example content (see `env_template`):
 
   Load `.env`
 
@@ -66,6 +52,11 @@ Structure
 
 * jenkins
   * `TF_VER`
+
+* gitea
+  * `GITEA_VERSION`
+  * `GITEA_PORT`
+  * `GITEA_SSH_PORT`
 
 ### Docker Volumes
 
