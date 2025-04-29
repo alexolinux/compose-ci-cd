@@ -16,6 +16,8 @@ Orchestrated CI/CD for Personal Lab (docker-compose)
   - kubectl
   - terraform
 
+* Git Repository with [gitea](https://about.gitea.com/)
+
 Structure
 
 ```shell
