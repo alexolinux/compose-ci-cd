@@ -21,7 +21,7 @@ services:
     volumes:
       - ${CONFIG}/code-server:/home/coder/.config
       - ${HOME}/.local:/home/coder/.local
-      - ${WORKSPACE}:/home/coder/project
+      - ${WORKSPACE}:/home/coder/workspace
     environment:
       - TZ=${TZ}
       - UID=${HOST_UID}
