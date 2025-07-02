@@ -64,4 +64,3 @@ RUN mkdir -p $HOME/.local/bin && \
 
 # Set the working directory
 WORKDIR $HOME/workspace
-
