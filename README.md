@@ -5,16 +5,17 @@
 Orchestrated CI/CD for Personal Lab (docker-compose)
 
 * CI Jenkins with:
-  - AWS Cli
-  - helm
-  - kubectl
-  - terraform
+  * AWS Cli
+  * helm
+  * kubectl
+  * terraform
 
 * Code-Server with:
-  - AWS Cli
-  - helm
-  - kubectl
-  - terraform
+  * AWS Cli
+  * helm
+  * kubectl
+  * terraform
+  * ZSH Customized for Dev/Ops 🔧 Users
 
 * Git Repository with [gitea](https://about.gitea.com/)
 
@@ -44,7 +45,7 @@ Structure
   source .env
   ```
 
-:information_source: Changing the Dockerfiles is required:
+⚠️ Make sure the changes are matching between `Dockerfiles` and `docker-compose.yaml`:
 
 * code-server
   * `CODE_VERSION`
