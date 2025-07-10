@@ -49,6 +49,7 @@ Structure
 
 * code-server
   * `CODE_VERSION`
+  * `CODE_PASSWORD`
   * `HOST_UID`
   * `HOST_GID`
   * `TF_VER`
