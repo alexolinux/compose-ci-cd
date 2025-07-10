@@ -7,7 +7,7 @@ ARG HOST_UID=1000
 ARG HOST_GID=1000
 
 # Terraform Version Release - https://releases.hashicorp.com/terraform/
-ENV TF_VER=1.12.0
+ENV TF_VER=1.12.2
 
 USER root
 
