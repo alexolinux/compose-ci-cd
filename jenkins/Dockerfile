@@ -1,7 +1,7 @@
-FROM jenkins/jenkins:latest
+FROM jenkins/jenkins:latest-jdk21
 
 # Terraform Version Release - https://releases.hashicorp.com/terraform/
-ENV TF_VER=1.10.3
+ENV TF_VER=1.12.2
 ARG ARCH
 
 # Switch to root user
