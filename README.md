@@ -16,8 +16,10 @@ Orchestrated CI/CD for Personal Lab (docker-compose)
   * kubectl
   * terraform
   * ZSH Customized for Dev/Ops 🔧 Users
+ 
+* **GitLab Server** (arm464 adaption for compatibility multi-arch)
 
-* Git Repository with [gitea](https://about.gitea.com/)
+* **Gitea** Repository with [gitea](https://about.gitea.com/)
 
 Structure
 
@@ -35,9 +37,11 @@ Structure
 
 ## Requirements
 
+* Create the required folders according to the `Environment` Project.
+
 * `.env` file: Define the values according to your system configuration.
   
-  Create `.env` based on the example content (see `env_template`):
+  Create/edit `.env` based on the template content (see `env_template`):
 
   Load `.env`
 
