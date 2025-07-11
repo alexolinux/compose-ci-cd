@@ -71,7 +71,7 @@ Structure
 * Jenkins Docker Volume:
 
   ```shell
-  docker volume create jenkins_home`
+  docker volume create jenkins_home
   ```
 
 **Author:**
