@@ -4,22 +4,22 @@
 
 Orchestrated CI/CD for Personal Lab (docker-compose)
 
-* CI **Jenkins** with:
+* CI **[Jenkins](https://www.jenkins.io/doc/book/installing/docker/)** with:
   * AWS cli
   * helm
   * kubectl
   * terraform
 
-* **Code-Server** with:
+* **[Code-Server]()** with:
   * AWS cli
   * helm
   * kubectl
   * terraform
   * ZSH Customized for Dev/Ops 🔧 Users
  
-* **GitLab Server** (arm464 adaption for compatibility multi-arch)
+* **[GitLab Server](https://docs.gitlab.com/install/docker/installation/)** (arm464 adaption for compatibility multi-arch)
 
-* **Gitea** Repository with [gitea](https://about.gitea.com/)
+* **[Gitea](https://about.gitea.com/)**
 
 Structure
 
