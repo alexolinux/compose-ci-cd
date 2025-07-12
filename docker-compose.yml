@@ -61,16 +61,13 @@ services:
       - xlocal
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        #external_url 'https://gitlab.xlocal.duckdns.org:8929' # <--- THIS REMAINS CORRECT. It's the public HTTPS URL.
+        external_url 'https://gitlab.xlocal.duckdns.org' 
         nginx['enable'] = true
         nginx['listen_port'] = 80 		# GitLab's internal NGINX listens on port 80 inside the container
         nginx['listen_https'] = false # NGINX frontend handles SSL
         gitlab_rails['gitlab_shell_ssh_port'] = 2424
         gitlab_rails['trusted_proxies'] = ['192.168.1.75/32', '192.168.1.80/32'] # Replace with your NGINX server's actual IP
-        # These headers are good practice and can be explicitly set if needed, though external_url often implies them:
-        # nginx['proxy_set_headers'] = { 'X-Forwarded-Proto' => 'https', 'X-Forwarded-Ssl' => 'on' }
     ports:
-      # Your external NGINX will connect to host_IP:8930.
       - '8930:80' 	# Docker host port 8930 -> container port 80
       - '2424:22' 	# For SSH access
     volumes:
