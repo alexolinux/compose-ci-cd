@@ -30,6 +30,7 @@ services:
       - 'GID=${HOST_GID}'
       - 'DOCKER_USER=${USER}'
       - 'PASSWORD=${CODE_PASSWORD}'
+      - 'WORKSPACE=${WORKSPACE}'
 
   #https://www.jenkins.io/doc/book/installing/docker/
   jenkins:

@@ -62,5 +62,5 @@ RUN mkdir -p $HOME/.local/bin && \
     sudo chsh -s $(command -v zsh) && \
     exec zsh 
 
-# Set the working directory
-WORKDIR $HOME/workspace
+WORKDIR /home/coder/workspace
+
