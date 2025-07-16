@@ -53,8 +53,9 @@ services:
       - 'jenkins_home:/var/jenkins_home'
 
   #https://github.com/zengxs/gitlab-arm64?tab=readme-ov-file
+  #https://docs.gitlab.com/install/docker/installation/
   gitlab:
-    image: zengxs/gitlab:latest
+    image: gitlab/gitlab-ce:latest   #zengxs/gitlab:latest
     container_name: gitlab-ci
     hostname: 'gitlab.xlocal.duckdns.org'
     restart: unless-stopped
