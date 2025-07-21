@@ -17,7 +17,7 @@ Orchestrated CI/CD for Personal Lab (docker-compose)
   * terraform
   * ZSH Customized for Dev/Ops 🔧 Users
  
-* **[GitLab Server](https://docs.gitlab.com/install/docker/installation/)** (arm464 adaption for compatibility multi-arch)
+* **[GitLab Server](https://docs.gitlab.com/install/docker/installation/)**
 
 * **[Gitea](https://about.gitea.com/)**
 
