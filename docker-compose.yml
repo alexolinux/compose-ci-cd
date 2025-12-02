@@ -52,56 +52,6 @@ services:
     volumes:
       - 'jenkins_home:/var/jenkins_home'
 
-  #https://github.com/zengxs/gitlab-arm64?tab=readme-ov-file
-  #https://docs.gitlab.com/install/docker/installation/
-  gitlab:
-    image: gitlab/gitlab-ce:latest   #zengxs/gitlab:latest
-    container_name: gitlab-ci
-    hostname: 'gitlab.xlocal.duckdns.org'
-    restart: unless-stopped
-    networks:
-      - xlocal
-    environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https://gitlab.xlocal.duckdns.org' 
-        nginx['enable'] = true
-        nginx['listen_port'] = 80 		# GitLab's internal NGINX listens on port 80 inside the container
-        nginx['listen_https'] = false # NGINX frontend handles SSL
-        gitlab_rails['gitlab_shell_ssh_port'] = 2424
-        gitlab_rails['trusted_proxies'] = ['192.168.1.75/32', '192.168.1.80/32'] # Replace with your NGINX server's actual IP
-    ports:
-      - '8930:80' 	# Docker host port 8930 -> container port 80
-      - '2424:22' 	# For SSH access
-    volumes:
-      - '${GITLAB_HOME}/config:/etc/gitlab'
-      - '${GITLAB_HOME}/logs:/var/log/gitlab'
-      - '${GITLAB_HOME}/data:/var/opt/gitlab'
-    shm_size: '256m'
-  
-  #https://docs.gitea.com/installation/install-with-docker
-  gitea:
-    #https://hub.docker.com/r/gitea/gitea/tags
-    image: gitea/gitea:${GITEA_VERSION:-latest}
-    container_name: gitea
-    hostname: gitea
-    restart: unless-stopped
-    networks:
-      - xlocal
-    environment:
-      - 'TZ=${TZ}'
-      - 'USER_UID=${HOST_UID}'
-      - 'USER_GID=${HOST_GID}'
-    volumes:
-      - '${CONFIG}/gitea:/data'
-      - type: bind
-        source: '${WORKSPACE}/gitea'
-        target: /mnt/repositories
-        bind:
-          propagation: shared
-    ports:
-      - '${GITEA_PORT}:3000'
-      - '${GITEA_SSH_PORT}:22'
-  
   #https://docs.n8n.io/hosting/installation/docker/
   n8n:
     #https://hub.docker.com/r/n8nio/n8n
