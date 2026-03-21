@@ -82,7 +82,9 @@ services:
       - "N8N_BASIC_AUTH_ACTIVE=true"
       - "N8N_BASIC_AUTH_USER=${N8N_USER}"
       - "N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD}"
-      - "N8N_RUNNERS_ENABLED=true"
+      - "N8N_RUNNERS_ENABLED=false"
+      - "N8N_DIAGNOSTICS_ENABLED=false"
+      - "N8N_METRICS_ENABLED=false"
     volumes:
       - "n8n_home:/home/node/.n8n"
 
