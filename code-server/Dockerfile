@@ -1,41 +1,87 @@
 ARG CODE_VERSION=4.112.0-39
-#https://hub.docker.com/r/codercom/code-server/tags
+
+# Multi-arch downloader stage
+FROM alpine:3.19 AS downloader
+
+ARG ARCH=amd64
+ARG TF_VERSION=1.7.5
+ARG KUBECTL_VERSION=v1.29.2
+ARG HELM_VERSION=v3.14.2
+ARG AWS_CLI_VERSION=2.15.25
+
+RUN apk add --no-cache curl unzip tar
+
+WORKDIR /downloads
+
+# Download Terraform
+RUN if [ "${ARCH}" = "amd64" ]; then TF_ARCH="amd64"; else TF_ARCH="arm64"; fi && \
+    curl -LO "https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_${TF_ARCH}.zip" && \
+    unzip "terraform_${TF_VERSION}_linux_${TF_ARCH}.zip" && \
+    rm "terraform_${TF_VERSION}_linux_${TF_ARCH}.zip"
+
+# Download Kubectl
+RUN if [ "${ARCH}" = "amd64" ]; then K_ARCH="amd64"; else K_ARCH="arm64"; fi && \
+    curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${K_ARCH}/kubectl" && \
+    chmod +x kubectl
+
+# Download Helm
+RUN if [ "${ARCH}" = "amd64" ]; then H_ARCH="amd64"; else H_ARCH="arm64"; fi && \
+    curl -LO "https://get.helm.sh/helm-${HELM_VERSION}-linux-${H_ARCH}.tar.gz" && \
+    tar -xzf "helm-${HELM_VERSION}-linux-${H_ARCH}.tar.gz" && \
+    mv linux-${H_ARCH}/helm . && \
+    rm -rf linux-${H_ARCH} "helm-${HELM_VERSION}-linux-${H_ARCH}.tar.gz"
+
+# Download AWS CLI
+RUN if [ "${ARCH}" = "amd64" ]; then AWS_ARCH="x86_64"; else AWS_ARCH="aarch64"; fi && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-${AWS_ARCH}-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    rm awscliv2.zip
+
+# Final Stage
 FROM codercom/code-server:${CODE_VERSION}
 
-ARG ARCH
 ARG HOST_UID=1000
 ARG HOST_GID=1000
-
-# Terraform Version Release - https://releases.hashicorp.com/terraform/
-ENV TF_VER=1.14.7
+ARG CONTAINER_USER=coder
 
 USER root
 
+# Install runtime dependencies and clean up
 RUN dnf update -y && \
-    dnf install -y \
-    curl unzip gnupg2 ca-certificates openssl vim-enhanced util-linux zsh && \
-    dnf clean all
+    dnf install -y git zsh vim-enhanced util-linux procps-ng && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(arch).zip" -o "awscliv2.zip" && \
-    unzip awscliv2.zip && \
-    ./aws/install && \
-    rm -rf aws awscliv2.zip && \
-    rm -rf ./aws
+# Copy binaries from downloader
+COPY --from=downloader /downloads/terraform /usr/local/bin/
+COPY --from=downloader /downloads/kubectl /usr/local/bin/
+COPY --from=downloader /downloads/helm /usr/local/bin/
+COPY --from=downloader /downloads/aws /tmp/aws
+RUN /tmp/aws/install && rm -rf /tmp/aws
 
-RUN curl -LO "https://releases.hashicorp.com/terraform/${TF_VER}/terraform_${TF_VER}_linux_${ARCH}.zip" && \
-    unzip terraform_${TF_VER}_linux_${ARCH}.zip && \
-    mv terraform /usr/local/bin && \
-    rm -f terraform_*.zip
-
-RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/${ARCH}/kubectl" && \
-    chmod +x ./kubectl && \
-    mv ./kubectl /usr/local/bin/kubectl
-
-RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sh
-
+# Environment and Shell setup
 ENV PATH="/usr/local/bin:${PATH}"
 
+USER root
+
+# Personal configuration and ZSH Enhancements
+RUN touch /home/${CONTAINER_USER}/.zshrc && \
+    git clone --depth 1 https://github.com/alexolinux/zsh-empowered-productivity.git /tmp/zsh-p && \
+    USER=${CONTAINER_USER} HOME=/home/${CONTAINER_USER} /bin/bash /tmp/zsh-p/install.sh && \
+    git clone --depth 1 https://github.com/alexolinux/zsh-kube-enhancer.git /tmp/zsh-k && \
+    USER=${CONTAINER_USER} HOME=/home/${CONTAINER_USER} /bin/bash /tmp/zsh-k/install.sh && \
+    rm -rf /tmp/zsh-* && \
+    chsh -s $(command -v zsh) ${CONTAINER_USER} && \
+    chown -R ${HOST_UID}:${HOST_GID} /home/${CONTAINER_USER}
+
 USER ${HOST_UID}:${HOST_GID}
+WORKDIR /home/${CONTAINER_USER}/workspace
+SHELL ["/bin/zsh", "-c"]
+
+# SSH and Git Config
+RUN mkdir -p $HOME/.ssh && chmod 700 $HOME/.ssh && \
+    git config --global init.defaultBranch main && \
+    git config --global pull.rebase false
 
 RUN cat <<EOF > $HOME/.vimrc
 syntax on
@@ -50,17 +96,8 @@ set sts=2
 set sw=2
 EOF
 
-RUN mkdir -p $HOME/.local/bin && \
-    mkdir $HOME/workspace && \
-    touch $HOME/.zshrc && \
-    export PATH=$PATH:$HOME/.local/bin && \
-    git clone https://github.com/alexolinux/zsh-empowered-productivity.git /tmp/zsh-empowered-productivity && \
-    /bin/bash /tmp/zsh-empowered-productivity/install.sh && \
-    git clone https://github.com/alexolinux/zsh-kube-enhancer.git /tmp/zsh-kube-enhancer && \
-    /bin/bash /tmp/zsh-kube-enhancer/install.sh && \
-    sudo rm -rf /tmp/zsh-* && \
-    sudo chsh -s $(command -v zsh) && \
-    exec zsh 
+WORKDIR /home/${CONTAINER_USER}/workspace
 
-WORKDIR /home/coder/workspace
+# Default command for code-server
+CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "."]
 

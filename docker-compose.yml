@@ -14,14 +14,20 @@ services:
       args:
         ARCH: "${ARCH}"
         CODE_VERSION: "${CODE_VERSION}"
+        TF_VERSION: "${TF_VERSION}"
+        KUBECTL_VERSION: "${KUBECTL_VERSION}"
+        HELM_VERSION: "${HELM_VERSION}"
+        AWS_CLI_VERSION: "${AWS_CLI_VERSION}"
         HOST_UID: "${HOST_UID}"
         HOST_GID: "${HOST_GID}"
+        CONTAINER_USER: "${USER_NAME:-coder}"
     ports:
       - "${CODE_PORT}:8080"
     volumes:
-      - "${CONFIG}/code-server:/home/coder/.config"
+      - "${CONFIG}/code-server:/home/coder/.config/code-server"
       - "${HOME}/.local:/home/coder/.local"
       - "${WORKSPACE}:/home/coder/workspace"
+      - "${HOME}/.ssh:/home/coder/.ssh:ro"
     user: "${HOST_UID}:${HOST_GID}"
     environment:
       - "TZ=${TZ}"
@@ -43,18 +49,23 @@ services:
       context: jenkins
       dockerfile: Dockerfile
       args:
-        # Check the SO Architecture
         ARCH: "${ARCH}"
+        JENKINS_VERSION: "${JENKINS_VERSION:-latest-jdk21}"
+        TF_VERSION: "${TF_VERSION}"
+        KUBECTL_VERSION: "${KUBECTL_VERSION}"
+        HELM_VERSION: "${HELM_VERSION}"
+        AWS_CLI_VERSION: "${AWS_CLI_VERSION}"
     ports:
       - "${JENKINS_PORT}:8080"
       - "${JENKINS_AGENT_PORT}:50000"
     volumes:
       - "jenkins_home:/var/jenkins_home"
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
   #https://docs.n8n.io/hosting/installation/docker/
   n8n:
     #https://hub.docker.com/r/n8nio/n8n
-    image: n8nio/n8n:stable
+    image: n8nio/n8n:${N8N_VERSION}
     container_name: n8n
     hostname: n8n
     restart: unless-stopped
@@ -72,7 +83,6 @@ services:
       - "N8N_BASIC_AUTH_USER=${N8N_USER}"
       - "N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD}"
       - "N8N_RUNNERS_ENABLED=true"
-      #- "N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true"
     volumes:
       - "n8n_home:/home/node/.n8n"
 
