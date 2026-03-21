@@ -24,10 +24,10 @@ services:
     ports:
       - "${CODE_PORT}:8080"
     volumes:
-      - "${CONFIG}/code-server:/home/coder/.config/code-server"
-      - "${HOME}/.local:/home/coder/.local"
-      - "${WORKSPACE}:/home/coder/workspace"
-      - "${HOME}/.ssh:/home/coder/.ssh:ro"
+      - "${CONFIG}/code-server:/home/${USER_NAME:-coder}/.config/code-server"
+      - "${HOME}/.local:/home/${USER_NAME:-coder}/.local"
+      - "${WORKSPACE}:/home/${USER_NAME:-coder}/workspace"
+      - "${HOME}/.ssh:/home/${USER_NAME:-coder}/.ssh:ro"
     user: "${HOST_UID}:${HOST_GID}"
     environment:
       - "TZ=${TZ}"

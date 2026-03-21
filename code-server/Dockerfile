@@ -48,9 +48,17 @@ USER root
 
 # Install runtime dependencies and clean up
 RUN dnf update -y && \
-    dnf install -y git zsh vim-enhanced util-linux procps-ng && \
+    dnf install -y git zsh vim-enhanced util-linux procps-ng shadow-utils && \
     dnf clean all && \
     rm -rf /var/cache/dnf
+
+# Rename user and group to match CONTAINER_USER and IDs
+RUN if [ "${CONTAINER_USER}" != "coder" ]; then \
+      usermod -l ${CONTAINER_USER} -d /home/${CONTAINER_USER} -m coder && \
+      groupmod -n ${CONTAINER_USER} coder; \
+    fi && \
+    usermod -u ${HOST_UID} ${CONTAINER_USER} && \
+    groupmod -g ${HOST_GID} ${CONTAINER_USER}
 
 # Copy binaries from downloader
 COPY --from=downloader /downloads/terraform /usr/local/bin/
