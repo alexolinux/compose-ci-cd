@@ -1,4 +1,4 @@
-ARG CODE_VERSION=4.101.2-39
+ARG CODE_VERSION=4.112.0-39
 #https://hub.docker.com/r/codercom/code-server/tags
 FROM codercom/code-server:${CODE_VERSION}
 
@@ -7,7 +7,7 @@ ARG HOST_UID=1000
 ARG HOST_GID=1000
 
 # Terraform Version Release - https://releases.hashicorp.com/terraform/
-ENV TF_VER=1.12.2
+ENV TF_VER=1.14.7
 
 USER root
 

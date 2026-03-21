@@ -1,5 +1,4 @@
 services:
-
   #https://coder.com/docs/code-server/install#docker
   code-server:
     #https://hub.docker.com/r/codercom/code-server/tags
@@ -13,24 +12,24 @@ services:
       context: code-server
       dockerfile: Dockerfile
       args:
-        ARCH: '${ARCH}'
-        CODE_VERSION: '${CODE_VERSION}'
-        HOST_UID: '${HOST_UID}'
-        HOST_GID: '${HOST_GID}'
+        ARCH: "${ARCH}"
+        CODE_VERSION: "${CODE_VERSION}"
+        HOST_UID: "${HOST_UID}"
+        HOST_GID: "${HOST_GID}"
     ports:
-      - '${CODE_PORT}:8080'
+      - "${CODE_PORT}:8080"
     volumes:
-      - '${CONFIG}/code-server:/home/coder/.config'
-      - '${HOME}/.local:/home/coder/.local'
-      - '${WORKSPACE}:/home/coder/workspace'
-    user: '${HOST_UID}:${HOST_GID}'
+      - "${CONFIG}/code-server:/home/coder/.config"
+      - "${HOME}/.local:/home/coder/.local"
+      - "${WORKSPACE}:/home/coder/workspace"
+    user: "${HOST_UID}:${HOST_GID}"
     environment:
-      - 'TZ=${TZ}'
-      - 'UID=${HOST_UID}'
-      - 'GID=${HOST_GID}'
-      - 'DOCKER_USER=${USER}'
-      - 'PASSWORD=${CODE_PASSWORD}'
-      - 'WORKSPACE=${WORKSPACE}'
+      - "TZ=${TZ}"
+      - "UID=${HOST_UID}"
+      - "GID=${HOST_GID}"
+      - "DOCKER_USER=${USER}"
+      - "PASSWORD=${CODE_PASSWORD}"
+      - "WORKSPACE=${WORKSPACE}"
 
   #https://www.jenkins.io/doc/book/installing/docker/
   jenkins:
@@ -45,12 +44,12 @@ services:
       dockerfile: Dockerfile
       args:
         # Check the SO Architecture
-        ARCH: '${ARCH}'
+        ARCH: "${ARCH}"
     ports:
-      - '${JENKINS_PORT}:8080'
-      - '${JENKINS_AGENT_PORT}:50000'
+      - "${JENKINS_PORT}:8080"
+      - "${JENKINS_AGENT_PORT}:50000"
     volumes:
-      - 'jenkins_home:/var/jenkins_home'
+      - "jenkins_home:/var/jenkins_home"
 
   #https://docs.n8n.io/hosting/installation/docker/
   n8n:
@@ -64,18 +63,18 @@ services:
     ports:
       - "${N8N_PORT}:5678"
     environment:
-      - 'TZ=${TZ}'
-      - 'NODE_ENV=production'
-      - 'N8N_HOST=${N8N_HOST}'
-      - 'WEBHOOK_URL=https://${N8N_HOST}/'
-      - 'N8N_PROTOCOL=https'
-      - 'N8N_BASIC_AUTH_ACTIVE=true'
-      - 'N8N_BASIC_AUTH_USER=${N8N_USER}'
-      - 'N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD}'
-      - 'N8N_RUNNERS_ENABLED=true'
-      #- 'N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true'
+      - "TZ=${TZ}"
+      - "NODE_ENV=production"
+      - "N8N_HOST=${N8N_HOST}"
+      - "WEBHOOK_URL=https://${N8N_HOST}/"
+      - "N8N_PROTOCOL=https"
+      - "N8N_BASIC_AUTH_ACTIVE=true"
+      - "N8N_BASIC_AUTH_USER=${N8N_USER}"
+      - "N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD}"
+      - "N8N_RUNNERS_ENABLED=true"
+      #- "N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true"
     volumes:
-      - 'n8n_home:/home/node/.n8n'
+      - "n8n_home:/home/node/.n8n"
 
 volumes:
   jenkins_home:
@@ -87,4 +86,3 @@ networks:
   xlocal:
     name: xlocal
     driver: bridge
-

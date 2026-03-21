@@ -1,7 +1,7 @@
 FROM jenkins/jenkins:latest-jdk21
 
 # Terraform Version Release - https://releases.hashicorp.com/terraform/
-ENV TF_VER=1.12.2
+ENV TF_VER=1.14.7
 ARG ARCH
 
 # Switch to root user
@@ -50,4 +50,3 @@ ENV PATH="/usr/local/bin:${PATH}"
 
 # Switch back to Jenkins user
 USER jenkins
-
