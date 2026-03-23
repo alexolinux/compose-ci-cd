@@ -2,6 +2,8 @@ services:
   #https://coder.com/docs/code-server/install#docker
   code-server:
     #https://hub.docker.com/r/codercom/code-server/tags
+    mem_limit: 2g
+    cpus: 2.0
     image: code-server-ci
     container_name: code-server
     hostname: code-server
