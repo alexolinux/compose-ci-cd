@@ -11,8 +11,8 @@ services:
     networks:
       - xlocal
     build:
-      context: code-server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: code-server/Dockerfile
       args:
         ARCH: "${ARCH}"
         CODE_VERSION: "${CODE_VERSION}"
@@ -48,8 +48,8 @@ services:
     networks:
       - xlocal
     build:
-      context: jenkins
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: jenkins/Dockerfile
       args:
         ARCH: "${ARCH}"
         JENKINS_VERSION: "${JENKINS_VERSION:-latest-jdk21}"

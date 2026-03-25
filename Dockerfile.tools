@@ -1,0 +1,38 @@
+# Shared multi-arch downloader stage for CI/CD tools
+# This stage is shared between code-server and jenkins to avoid duplication
+# All ARG values must be passed from docker-compose.yml via .env file
+FROM alpine:3.19 AS tools-downloader
+
+ARG ARCH
+ARG TF_VERSION
+ARG KUBECTL_VERSION
+ARG HELM_VERSION
+ARG AWS_CLI_VERSION
+
+RUN apk add --no-cache curl unzip tar
+
+WORKDIR /downloads
+
+# Download Terraform
+RUN if [ "${ARCH}" = "amd64" ]; then TF_ARCH="amd64"; else TF_ARCH="arm64"; fi && \
+    curl -LO "https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_${TF_ARCH}.zip" && \
+    unzip "terraform_${TF_VERSION}_linux_${TF_ARCH}.zip" && \
+    rm "terraform_${TF_VERSION}_linux_${TF_ARCH}.zip"
+
+# Download Kubectl
+RUN if [ "${ARCH}" = "amd64" ]; then K_ARCH="amd64"; else K_ARCH="arm64"; fi && \
+    curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${K_ARCH}/kubectl" && \
+    chmod +x kubectl
+
+# Download Helm
+RUN if [ "${ARCH}" = "amd64" ]; then H_ARCH="amd64"; else H_ARCH="arm64"; fi && \
+    curl -LO "https://get.helm.sh/helm-${HELM_VERSION}-linux-${H_ARCH}.tar.gz" && \
+    tar -xzf "helm-${HELM_VERSION}-linux-${H_ARCH}.tar.gz" && \
+    mv linux-${H_ARCH}/helm . && \
+    rm -rf linux-${H_ARCH} "helm-${HELM_VERSION}-linux-${H_ARCH}.tar.gz"
+
+# Download AWS CLI
+RUN if [ "${ARCH}" = "amd64" ]; then AWS_ARCH="x86_64"; else AWS_ARCH="aarch64"; fi && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-${AWS_ARCH}-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    rm awscliv2.zip
