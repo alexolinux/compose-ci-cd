@@ -56,10 +56,10 @@ Structure
   * `CODE_PASSWORD`
   * `HOST_UID`
   * `HOST_GID`
-  * `TF_VER`
+  * `TF_VERSION`
 
 * jenkins
-  * `TF_VER`
+  * `TF_VERSION`
 
 * gitea
   * `GITEA_VERSION`

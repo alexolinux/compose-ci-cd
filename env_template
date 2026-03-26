@@ -2,9 +2,17 @@
 CONFIG="${HOME}/.config/microservices"  # Change this PATH according to your needs.
 WORKSPACE="${HOME}/workspace"           # Change this WORKSPACE according to your needs.
 ARCH=""                                 # Platforms:  "amd64" for x86_64 "arm64" for ARM (i.e.: Raspberry PI).
-TZ=""
+TZ=""                                   # timedatectl list-timezones
 HOST_UID=""
 HOST_GID=""
+USER_NAME=""
+USER=""
+
+#-- Tool Versions
+TF_VERSION=""                           # https://github.com/hashicorp/terraform/releases
+KUBECTL_VERSION=""                      # https://github.com/kubernetes/kubectl/tags
+HELM_VERSION=""                         # https://github.com/helm/helm/releases
+AWS_CLI_VERSION=""                      # https://github.com/aws/aws-cli/tags
 
 #-- Code Server
 # https://hub.docker.com/r/codercom/code-server/tags
@@ -16,7 +24,7 @@ CODE_PASSWORD=""
 JENKINS_PORT=""
 JENKINS_AGENT_PORT=50000
 #-- Terraform for Jenkins
-TF_VER=""
+TF_VERSION=""
 
 #-- N8N
 # #https://hub.docker.com/r/n8nio/n8n
