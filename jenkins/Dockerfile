@@ -2,9 +2,8 @@
 FROM Dockerfile.tools AS tools-downloader
 
 # Final Stage
-FROM jenkins/jenkins
-
 ARG JENKINS_VERSION
+FROM jenkins/jenkins:${JENKINS_VERSION:-latest}
 
 USER root
 

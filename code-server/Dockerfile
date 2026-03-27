@@ -2,20 +2,29 @@
 FROM Dockerfile.tools AS tools-downloader
 
 # Final Stage
-FROM codercom/code-server
-
 ARG CODE_VERSION
+FROM codercom/code-server:${CODE_VERSION:-latest}
+
 ARG HOST_UID
 ARG HOST_GID
 ARG CONTAINER_USER
 
 USER root
 
-# Install runtime dependencies and clean up
-RUN dnf update -y && \
-    dnf install -y git zsh vim-enhanced util-linux procps-ng shadow-utils && \
-    dnf clean all && \
-    rm -rf /var/cache/dnf
+# Detect package manager and install dependencies dynamically
+RUN if command -v apt-get >/dev/null; then \
+      apt-get update && \
+      apt-get install -y --no-install-recommends git zsh vim sudo procps util-linux && \
+      apt-get clean && rm -rf /var/lib/apt/lists/*; \
+    else \
+      dnf update -y && \
+      dnf install -y git zsh vim-enhanced util-linux procps-ng shadow-utils sudo && \
+      dnf clean all && rm -rf /var/cache/dnf; \
+    fi
+
+# Add sudo support for CONTAINER_USER
+RUN echo "${CONTAINER_USER} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${CONTAINER_USER} && \
+    chmod 0440 /etc/sudoers.d/${CONTAINER_USER}
 
 # Rename user and group to match CONTAINER_USER and IDs
 RUN if [ "${CONTAINER_USER}" != "coder" ]; then \
@@ -23,7 +32,7 @@ RUN if [ "${CONTAINER_USER}" != "coder" ]; then \
       groupmod -n ${CONTAINER_USER} coder; \
     fi && \
     usermod -u ${HOST_UID} ${CONTAINER_USER} && \
-    groupmod -g ${HOST_GID} ${CONTAINER_USER}
+    groupmod -g ${HOST_GID} ${CONTAINER_USER} || true
 
 # Copy binaries from shared tools-downloader
 COPY --from=tools-downloader /downloads/terraform /usr/local/bin/
@@ -31,11 +40,6 @@ COPY --from=tools-downloader /downloads/kubectl /usr/local/bin/
 COPY --from=tools-downloader /downloads/helm /usr/local/bin/
 COPY --from=tools-downloader /downloads/aws /tmp/aws
 RUN /tmp/aws/install && rm -rf /tmp/aws
-
-# Environment and Shell setup
-ENV PATH="/usr/local/bin:${PATH}"
-
-USER root
 
 # Personal configuration and ZSH Enhancements
 RUN touch /home/${CONTAINER_USER}/.zshrc && \
@@ -68,8 +72,6 @@ set ts=2
 set sts=2
 set sw=2
 EOF
-
-WORKDIR /home/${CONTAINER_USER}/workspace
 
 # Default command for code-server
 CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "."]
