@@ -1,36 +1,41 @@
-#-- OS System
-CONFIG="${HOME}/.config/microservices"  # Change this PATH according to your needs.
-WORKSPACE="${HOME}/workspace"           # Change this WORKSPACE according to your needs.
-ARCH=""                                 # Platforms:  "amd64" for x86_64 "arm64" for ARM (i.e.: Raspberry PI).
-TZ=""
-HOST_UID=""
-HOST_GID=""
+#-- [ GLOBAL SYSTEM CONFIGURATION ] --
+USER=""                                     # Host user name
+USER_NAME=""                                # Internal user name (e.g. alex)
+HOST_UID=""                                 # result of `id -u`
+HOST_GID=""                                 # result of `id -g`
+TZ=""                                       # e.g. UTC, Europe/Lisbon, etc
+ARCH=""                                     # amd64 or arm64
 
-#-- Code Server
-# https://hub.docker.com/r/codercom/code-server/tags
-CODE_VERSION=""
-CODE_PORT=""
-CODE_PASSWORD=""
+# Local Storage Paths
+WORKSPACE="${HOME}/workspace"               # Host workspace path
+CONFIG="${HOME}/.config/microservices"      # Host config path
 
-#-- Jenkins
-JENKINS_PORT=""
+#-- [ SHARED TOOL VERSIONS ] --
+TF_VERSION=""                               # https://github.com/hashicorp/terraform/releases
+KUBECTL_VERSION=""                          # https://github.com/kubernetes/kubectl/tags
+HELM_VERSION=""                             # https://github.com/helm/helm/releases
+AWS_CLI_VERSION=""                          # https://github.com/aws/aws-cli/tags
+
+#-- [ SERVICE: CODE-SERVER ] --
+# Source: https://hub.docker.com/r/codercom/code-server/tags
+CODE_VERSION=""                             # e.g. 4.112.0-bookworm
+CODE_PORT=""                                # e.g. 8081
+CODE_PASSWORD=""                            # Access password
+
+#-- [ SERVICE: JENKINS ] --
+JENKINS_VERSION="slim"                       # e.g. slim (recommended for multi-arch/Raspberry Pi)
+JENKINS_PORT=""                             # e.g. 8008
 JENKINS_AGENT_PORT=50000
-#-- Terraform for Jenkins
-TF_VER=""
 
-#-- N8N
-# #https://hub.docker.com/r/n8nio/n8n
+#-- [ SERVICE: N8N ] --
+# Source: https://hub.docker.com/r/n8nio/n8n
 N8N_VERSION=""
 N8N_PORT=""
 N8N_HOST=""
 N8N_USER=""
 N8N_PASSWORD=""
 
-#-- GIT Compose Services
-#-- Gitea
-#GITEA_VERSION="latest"
-#GITEA_PORT=""
-#GITEA_SSH_PORT=""
-
-#-- GitLab
-#GITLAB_HOME=""
+#-- [ OPTIONAL: GIT SERVICES ] --
+# GITEA_VERSION="latest"
+# GITEA_PORT="3000"
+# GITEA_SSH_PORT="2222"

@@ -1,7 +1,7 @@
 services:
-  #https://coder.com/docs/code-server/install#docker
+  # https://coder.com/docs/code-server/install#docker
   code-server:
-    #https://hub.docker.com/r/codercom/code-server/tags
+    # https://hub.docker.com/r/codercom/code-server/tags
     mem_limit: 2g
     cpus: 2.0
     image: code-server-ci
@@ -11,8 +11,8 @@ services:
     networks:
       - xlocal
     build:
-      context: code-server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: code-server/Dockerfile
       args:
         ARCH: "${ARCH}"
         CODE_VERSION: "${CODE_VERSION}"
@@ -39,7 +39,7 @@ services:
       - "PASSWORD=${CODE_PASSWORD}"
       - "WORKSPACE=${WORKSPACE}"
 
-  #https://www.jenkins.io/doc/book/installing/docker/
+  # https://www.jenkins.io/doc/book/installing/docker/
   jenkins:
     image: jenkins-ci
     container_name: jenkins
@@ -48,8 +48,8 @@ services:
     networks:
       - xlocal
     build:
-      context: jenkins
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: jenkins/Dockerfile
       args:
         ARCH: "${ARCH}"
         JENKINS_VERSION: "${JENKINS_VERSION:-latest-jdk21}"
@@ -64,9 +64,9 @@ services:
       - "jenkins_home:/var/jenkins_home"
       - "/var/run/docker.sock:/var/run/docker.sock"
 
-  #https://docs.n8n.io/hosting/installation/docker/
+  # https://docs.n8n.io/hosting/installation/docker/
   n8n:
-    #https://hub.docker.com/r/n8nio/n8n
+    # https://hub.docker.com/r/n8nio/n8n
     image: n8nio/n8n:${N8N_VERSION}
     container_name: n8n
     hostname: n8n

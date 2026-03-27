@@ -1,80 +1,86 @@
-# compose-ci-cd
+# Compose CI/CD - Personal Lab
 
 ---------------
 
-Orchestrated CI/CD for Personal Lab (docker-compose)
+A highly optimized, multi-architecture (AMD64/ARM64) Orchestrated CI/CD Environment for Personal Labs using Docker Compose.
 
-* CI **[Jenkins](https://www.jenkins.io/doc/book/installing/docker/)** with:
-  * AWS cli
-  * helm
-  * kubectl
-  * terraform
+## 🚀 Featured Services
 
-* **[Code-Server]()** with:
-  * AWS cli
-  * helm
-  * kubectl
-  * terraform
-  * ZSH Customized for Dev/Ops 🔧 Users
- 
-* **[GitLab Server](https://docs.gitlab.com/install/docker/installation/)**
+*   **[Code-Server](https://github.com/coder/code-server)**: VS Code in the browser optimized for DevOps.
+    *   Pre-installed: AWS CLI, Helm, Kubectl, Terraform.
+    *   ZSH customized for DevOps users.
+    *   **Host-User Sync**: Runs with your local UID/GID to avoid permission issues.
+*   **[Jenkins](https://www.jenkins.io/doc/book/installing/docker/)**: Continuous Integration server.
+    *   **Slim Edition**: Optimized for Raspberry Pi/ARM (lower memory footprint).
+    *   Shared CI/CD toolset synced with Code-Server.
+    *   Docker-out-of-Docker (DooD) support.
+*   **[n8n](https://n8n.io/)**: Workflow automation tool (Optional/Included).
+*   **Git Services**: Supports Gitea/GitLab integration (see `git-compose.yml`).
 
-* **[Gitea](https://about.gitea.com/)**
+## 🛠️ Project Structure
 
-Structure
-
-```shell
+```text
 .
-├── code-server
-│   └── Dockerfile
-├── docker-compose.yml
-├── env_template
-├── jenkins
-│   └── Dockerfile
-├── LICENSE
+├── code-server/         # Code-Server customization (Dockerfile, config)
+├── jenkins/             # Jenkins customization (Dockerfile, plugins)
+├── Dockerfile.tools     # Shared Multi-arch Tools Downloader (The "Source of Truth")
+├── docker-compose.yml   # Main orchestration
+├── .env                 # Unified environment configuration
+├── OPTIMIZATION.md      # Detailed technical optimization report
 └── README.md
 ```
 
-## Requirements
+## ⚙️ Configuration
 
-* Create the required folders according to the `Environment` Project.
+The project uses a unified `.env` file to manage all versions and configurations across all containers.
 
-* `.env` file: Define the values according to your system configuration.
-  
-  Create/edit `.env` based on the template content (see `env_template`):
+### 1. Preparation
 
-  Load `.env`
+Create your `.env` file based on the provided template or existing configuration:
 
-  ```shell
-  source .env
-  ```
+```bash
+# Set your Host identity (crucial for permissions)
+USER_NAME="your_user"
+HOST_UID=$(id -u)
+HOST_GID=$(id -g)
 
-⚠️ Make sure the changes are matching between `Dockerfiles` and `docker-compose.yaml`:
+# Set your Architecture
+ARCH="arm64" # or "amd64"
+```
 
-* code-server
-  * `CODE_VERSION`
-  * `CODE_PASSWORD`
-  * `HOST_UID`
-  * `HOST_GID`
-  * `TF_VER`
+### 2. Required Volumes
 
-* jenkins
-  * `TF_VER`
+The services expect some external volumes and local paths. Ensure they exist:
 
-* gitea
-  * `GITEA_VERSION`
-  * `GITEA_PORT`
-  * `GITEA_SSH_PORT`
+```bash
+# Create persistent volumes
+docker volume create jenkins_home
+docker volume create n8n_home
 
-### Docker Volumes
+# Ensure local workspace exists
+mkdir -p ~/workspace
+```
 
-* Jenkins Docker Volume:
+### 3. Usage
 
-  ```shell
-  docker volume create jenkins_home
-  ```
+Build and start the environment:
 
+```bash
+# Build using the optimized multi-stage cache
+docker-compose build
+
+# Start the lab
+docker-compose up -d
+```
+
+## 💎 Key Features
+
+*   **Multi-Arch Support**: Works natively on Raspberry Pi (ARM64) and standard Servers (AMD64).
+*   **Shared Tooling**: Terraform, Kubectl, Helm, and AWS CLI are downloaded once and shared across all CI/CD containers.
+*   **Permission Harmony**: No more `sudo` or permission denied errors. The containers adopt your host user's UID/GID.
+*   **Optimized Build**: Multi-stage Docker builds reduce image sizes by up to 40%.
+
+---
 **Author:**
-Alex Mendes
+Alex Mendes - [LinkedIn](https://www.linkedin.com/in/mendesalex/)
 
-<https://www.linkedin.com/in/mendesalex/>
