@@ -70,8 +70,9 @@ COPY --from=tools-downloader /downloads/helm /usr/local/bin/
 COPY --from=tools-downloader /downloads/aws /tmp/aws
 RUN /tmp/aws/install && rm -rf /tmp/aws
 
-# Personal configuration and ZSH Enhancements
-RUN touch /home/${CONTAINER_USER}/.zshrc && \
+# Personal configuration, directories and ZSH Enhancements
+RUN mkdir -p /home/${CONTAINER_USER}/.config/code-server /home/${CONTAINER_USER}/workspace /home/${CONTAINER_USER}/.local && \
+    touch /home/${CONTAINER_USER}/.zshrc && \
     git clone --depth 1 https://github.com/alexolinux/zsh-empowered-productivity.git /tmp/zsh-p && \
     USER=${CONTAINER_USER} HOME=/home/${CONTAINER_USER} /bin/bash /tmp/zsh-p/install.sh && \
     git clone --depth 1 https://github.com/alexolinux/zsh-kube-enhancer.git /tmp/zsh-k && \
