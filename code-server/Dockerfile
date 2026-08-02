@@ -25,9 +25,11 @@ RUN if [ "${ARCH}" = "amd64" ]; then AR="amd64"; K_AR="amd64"; H_AR="amd64"; A_A
 ARG CODE_VERSION
 FROM codercom/code-server:${CODE_VERSION:-latest}
 
-ARG HOST_UID
-ARG HOST_GID
-ARG CONTAINER_USER
+ARG HOST_UID=1000
+ARG HOST_GID=1000
+ARG CONTAINER_USER=coder
+
+ENV HOME=/home/${CONTAINER_USER}
 
 USER root
 
@@ -53,6 +55,13 @@ RUN if [ "${CONTAINER_USER}" != "coder" ]; then \
     fi && \
     usermod -u ${HOST_UID} ${CONTAINER_USER} && \
     groupmod -g ${HOST_GID} ${CONTAINER_USER} || true
+
+# Update fixuid configuration to match CONTAINER_USER
+RUN if [ -f /etc/fixuid/config.yml ]; then \
+      sed -i "s/user: coder/user: ${CONTAINER_USER}/g" /etc/fixuid/config.yml && \
+      sed -i "s/group: coder/group: ${CONTAINER_USER}/g" /etc/fixuid/config.yml && \
+      sed -i "s|/home/coder|/home/${CONTAINER_USER}|g" /etc/fixuid/config.yml; \
+    fi
 
 # Copy binaries from shared tools-downloader
 COPY --from=tools-downloader /downloads/terraform /usr/local/bin/
