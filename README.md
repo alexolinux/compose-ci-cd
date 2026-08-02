@@ -23,7 +23,6 @@ A highly optimized, multi-architecture (AMD64/ARM64) Orchestrated CI/CD Environm
 .
 ├── code-server/         # Code-Server customization (Dockerfile, config)
 ├── jenkins/             # Jenkins customization (Dockerfile, plugins)
-├── Dockerfile.tools     # Shared Multi-arch Tools Downloader (The "Source of Truth")
 ├── docker-compose.yml   # Main orchestration
 ├── .env                 # Unified environment configuration
 ├── OPTIMIZATION.md      # Detailed technical optimization report
