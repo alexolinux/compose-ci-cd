@@ -92,6 +92,9 @@ RUN mkdir -p $HOME/.ssh && chmod 700 $HOME/.ssh && \
 
 RUN cat <<EOF > $HOME/.vimrc
 syntax on
+set paste
+set cursorcolumn
+set cursorline
 set ai
 set si
 set et
@@ -101,7 +104,10 @@ set showcmd
 set ts=2
 set sts=2
 set sw=2
+set background=dark
+colorscheme ron
 EOF
 
 # Default command for code-server
 CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "."]
+
