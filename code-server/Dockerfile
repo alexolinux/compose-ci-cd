@@ -105,7 +105,7 @@ set ts=2
 set sts=2
 set sw=2
 set background=dark
-colorscheme ron
+colorscheme industry
 EOF
 
 # Default command for code-server
