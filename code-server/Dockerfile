@@ -23,7 +23,7 @@ RUN if [ "${ARCH}" = "amd64" ]; then AR="amd64"; K_AR="amd64"; H_AR="amd64"; A_A
 
 # Stage 2: Final Service Stage
 ARG CODE_VERSION
-FROM codercom/code-server:${CODE_VERSION:-latest}
+FROM codercom/code-server:${CODE_VERSION:-bookworm}
 
 ARG HOST_UID=1000
 ARG HOST_GID=1000
@@ -92,18 +92,18 @@ RUN mkdir -p $HOME/.ssh && chmod 700 $HOME/.ssh && \
 
 RUN cat <<EOF > $HOME/.vimrc
 syntax on
-set paste
-set cursorcolumn
-set cursorline
+set showcmd
+set wildmenu
+set hlsearch
+set incsearch
+set nu
 set ai
 set si
 set et
-set hlsearch
-set wildmenu
-set showcmd
 set ts=2
-set sts=2
 set sw=2
+set cursorline
+set cursorcolumn
 set background=dark
 colorscheme industry
 EOF
